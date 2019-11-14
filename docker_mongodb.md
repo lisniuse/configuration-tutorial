@@ -1,6 +1,6 @@
 # docker 配置 mongodb
 
-## 第一步：拉去官方镜像
+## 第一步：拉取官方镜像
 
 ``` bash
 $ docker pull mongo
@@ -8,16 +8,34 @@ $ docker pull mongo
 
 ## 第二步：创建容器
 
-请事先创建好 ``d:/data/mongodb/configdb/`` 和 ``d:/data/mongodb/db/`` 目录。**非windows系统同理**。
+**无需映射目录**
 
 ``` bash
-$ docker run --name mongodb -p 27017:27017 -v d:/data/mongodb/configdb/:/data/configdb/ -v d:/data/mongodb/db/:/data/db/ -d mongo --auth
+$ docker run -itd --name mongo -p 27017:27017 mongo --auth
 ```
 
 ## 第三步：进入容器创建账号密码
 
 ``` bash
-> db.createUser({ user: 'root', pwd: 'root', roles: [ { role: "userAdminAnyDatabase", db: "admin" } ] });
+$ docker exec -it mongo mongo admin
+```
+
+创建root用户
+
+``` bash
+> db.createUser({ user: 'root', pwd: 'root', roles: [{role: 'root', db: 'admin'}] })
+```
+
+创建普通用户，并指定数据库。
+
+``` bash
+> db.createUser({ user: "dbuser", pwd: "dbpass", roles: [{ role: "readWrite", db: "yourdb" }]})
+```
+
+给普通用户授权
+
+``` bash
+> db.grantRolesToUser("dbuser", [{role: "dbOwner", db: "yourdb"}])
 ```
 
 ## 第四步：安装adminMongo
@@ -36,6 +54,10 @@ $ npm start
 
 ## 第六步：填写数据库uri
 
-如下所示：
+root 用户：
 
-``mongodb://root:root@127.0.0.1``
+``mongodb://root:root@localhost:27017``
+
+普通用户：
+
+``mongodb://dbuser:dbpass@localhost:27017/yourdb?authSource=admin``
