@@ -29,7 +29,7 @@ $ docker exec -it mongo mongo admin
 创建普通用户，并指定数据库。
 
 ``` bash
-> db.createUser({ user: "dbuser", pwd: "dbpass", roles: [{ role: "readWrite", db: "yourdb" }]})
+> db.createUser({ user: "dbuser", pwd: "dbpass", roles: [{ role: "dbOwner", db: "yourdb" }]})
 ```
 
 给普通用户授权
@@ -52,7 +52,7 @@ $ npm install / yarn
 $ npm start
 ```
 
-## 第六步：填写数据库uri
+## 第六步：填写连接uri
 
 root 用户：
 
