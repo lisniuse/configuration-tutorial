@@ -26,6 +26,12 @@ $ docker exec -it mongo mongo admin
 > db.createUser({ user: 'root', pwd: 'root', roles: [{role: 'root', db: 'admin'}] })
 ```
 
+登录root用户
+
+``` bash
+> db.auth('root', 'root')
+```
+
 创建普通用户，并指定数据库。
 
 ``` bash
